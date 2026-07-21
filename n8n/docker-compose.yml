@@ -1,0 +1,147 @@
+name: n8n
+
+x-n8n-common: &n8n-common
+  image: docker.n8n.io/n8nio/n8n:latest
+  restart: unless-stopped
+  networks:
+    - artethan_net
+  environment:
+    # ---- General ----
+    GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+    TZ: ${GENERIC_TIMEZONE}
+    N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+
+    # ---- Database (Postgres) ----
+    DB_TYPE: postgresdb
+    DB_POSTGRESDB_HOST: postgres
+    DB_POSTGRESDB_PORT: 5432
+    DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+    DB_POSTGRESDB_USER: ${POSTGRES_USER}
+    DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
+
+    # ---- Queue mode (Redis) ----
+    EXECUTIONS_MODE: queue
+    QUEUE_BULL_REDIS_HOST: redis
+    QUEUE_BULL_REDIS_PORT: 6379
+    QUEUE_BULL_REDIS_PASSWORD: ${REDIS_PASSWORD}
+    QUEUE_HEALTH_CHECK_ACTIVE: "true"
+
+    # ---- Task runners (recommended execution mode) ----
+    N8N_RUNNERS_ENABLED: "true"
+
+    # ---- Security / misc ----
+    N8N_SECURE_COOKIE: "false" # no TLS in this deployment (local/VPN only). Set "true" if you put TLS in front.
+    N8N_PROXY_HOPS: 0
+  volumes:
+    - ./data/n8n:/home/node/.n8n
+    - ./data/files:/files
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "5"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    networks:
+      - artethan_net
+    environment:
+      TZ: ${GENERIC_TIMEZONE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1g
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - artethan_net
+    command: >
+      redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512m
+
+  n8n:
+    <<: *n8n-common
+    container_name: n8n_main
+    command: start
+    ports:
+      - "5678:5678"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5678/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1g
+
+  n8n-worker:
+    <<: *n8n-common
+    command: worker
+    depends_on:
+      n8n:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5678/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1g
+
+networks:
+  # Single network for the whole project (n8n + openclaw). Created once by
+  # either stack's init.sh; referenced here as external so `docker compose
+  # down` in this project never deletes it.
+  artethan_net:
+    external: true

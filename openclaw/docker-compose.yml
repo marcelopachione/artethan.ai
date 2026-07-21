@@ -1,0 +1,53 @@
+name: openclaw
+
+services:
+  openclaw:
+    image: ${OPENCLAW_IMAGE:-ghcr.io/openclaw/openclaw:latest}
+    container_name: openclaw_gateway
+    restart: unless-stopped
+    networks:
+      - artethan_net
+    environment:
+      # ---- General ----
+      TZ: ${GENERIC_TIMEZONE}
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+
+      # ---- Gateway ----
+      OPENCLAW_GATEWAY_BIND: lan
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      OPENCLAW_LOG_LEVEL: ${OPENCLAW_LOG_LEVEL:-info}
+
+      # ---- Model provider (OpenRouter) ----
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENCLAW_PRIMARY_MODEL: ${OPENCLAW_PRIMARY_MODEL:-openrouter/auto}
+
+      # ---- Paths (inside the container, user "node") ----
+      OPENCLAW_CONFIG_DIR: /home/node/.openclaw
+      OPENCLAW_WORKSPACE_DIR: /home/node/.openclaw/workspace
+    volumes:
+      - ./data/openclaw:/home/node/.openclaw
+    ports:
+      - "18789:18789"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:18789/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+networks:
+  # Single network for the whole project (n8n + openclaw). Created once (see
+  # init.sh) and referenced as external by both stacks, so neither compose
+  # project owns/destroys it on its own.
+  artethan_net:
+    external: true

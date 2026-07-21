@@ -1,0 +1,12 @@
+# Secrets reais (senhas, API keys, OAuth secrets) em texto puro — nunca commitar.
+infos/
+
+# Segredos gerados por init.sh (token/API key/senha) em cada stack.
+.env
+
+# Bind mounts de dados (Postgres, Redis, n8n, openclaw) — não versionar.
+data/
+
+# Backups locais.
+backups/*.tar.gz
+backups/*.sql.gz
