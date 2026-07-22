@@ -1,0 +1,703 @@
+{
+  "updatedAt": "2026-07-22T15:45:53.519Z",
+  "createdAt": "2026-07-22T14:48:05.466Z",
+  "id": "Dfw0cxqQEN4jdn66",
+  "name": "ASIMOV - Editando - Filter, Sort e Limit",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Register",
+        "formDescription": "Please fill in your details so we can get in touch.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name:",
+              "placeholder": "Full Name...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail:",
+              "fieldType": "email",
+              "placeholder": "Your best e-email...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company",
+              "placeholder": "Where you work..."
+            },
+            {
+              "fieldLabel": "Personal interests",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "IA"
+                  },
+                  {
+                    "option": "Cloud"
+                  },
+                  {
+                    "option": "N8N"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "2a82a9d1-71e1-4052-806c-82c7f6da9182",
+      "name": "Form - Lead Register",
+      "webhookId": "99b8b39d-cc53-4030-97e7-e62ac854d5e6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d7982a0e-056b-4a1b-8b6a-a6acb567b428",
+              "name": "Full Name",
+              "value": "={{ $json['Name:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1768704c-7909-4629-93e6-282a110f0964",
+              "name": "E-mail",
+              "value": "={{ $json['E-mail:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6619f959-2b03-4d62-98ba-7b14f913977f",
+              "name": "Company",
+              "value": "={{ $json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "61aa621e-dc8e-4a56-9258-fbd7f3c0e708",
+              "name": "Interests",
+              "value": "={{ $json['Personal interests'] }}",
+              "type": "array"
+            },
+            {
+              "id": "64160365-f9c5-484f-924a-ac50351f2d6c",
+              "name": "Status:",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "e47b8ac4-1a3d-4577-84d3-59dccd8d9f12",
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bca04748-1c7c-43e3-af2f-143b0e56f90a",
+      "name": "Rebuild Fields  -  Add Status and submittedAt"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "Interests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        656,
+        0
+      ],
+      "id": "701e593d-79d4-424d-93b0-c95b701831a6",
+      "name": "Join data"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "Interests",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "50d582a6-3b36-49ff-9709-03eab71c5494",
+      "name": "Split Out data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        320
+      ],
+      "id": "c9db30c8-fb86-44de-ae0e-fe63f2f22349",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ",
+          "mode": "list",
+          "cachedResultName": "Asimov: Leads and Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        224
+      ],
+      "id": "8162e00e-5f62-4a2b-a613-87a1124789b7",
+      "name": "Get leads",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ",
+          "mode": "list",
+          "cachedResultName": "Asimov: Leads and Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        640
+      ],
+      "id": "3e760dbb-c7e3-4b14-af61-06c6a5024e94",
+      "name": "Get leads1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ",
+          "mode": "list",
+          "cachedResultName": "Asimov: Leads and Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 377486207,
+          "mode": "list",
+          "cachedResultName": "Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit#gid=377486207"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        864
+      ],
+      "id": "1d8dbe00-d1de-4112-a097-4d4ac7223e82",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        208,
+        640
+      ],
+      "id": "2e96dd3c-e4bd-4912-b604-6472afa635e7",
+      "name": "Loop Over Items1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        640
+      ],
+      "id": "391e586b-e820-40e1-bbea-b14c0d34eabf",
+      "name": "Wait1",
+      "webhookId": "9a7fd1aa-1449-4832-b3b0-359a8dfa36d2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "Exemplo de como usar loops.\n\nDeve ser adicionado um manual trigger e depois ocnectar nos sheets"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        848
+      ],
+      "id": "f67f12f5-df89-4aad-8891-b7000e8e81d1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "64f791c2-55ac-4e63-8953-3110ba2a4c34",
+              "leftValue": "={{ $json.interesses }}",
+              "rightValue": "automacao",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "2de413ea-212f-4fb3-8fc6-d73ecc4a530e",
+              "leftValue": "={{ $json.interesses }}",
+              "rightValue": "n8n",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        224
+      ],
+      "id": "5d00a214-18ac-429d-bdec-c807e45bc546",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "row_number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        656,
+        224
+      ],
+      "id": "53d47106-2f0e-47f7-a0f7-40705a424c89",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        880,
+        224
+      ],
+      "id": "e2abd330-9d9a-42e1-9c56-853a9e71ae30",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ",
+          "mode": "list",
+          "cachedResultName": "Asimov: Leads and Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 377486207,
+          "mode": "list",
+          "cachedResultName": "Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dp_TMnxJdxT8Obiqd9D4344pJAY14qbIJUs4pZyiSTQ/edit#gid=377486207"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        880,
+        416
+      ],
+      "id": "a6707112-8727-48fe-a272-0d4ae47232fa",
+      "name": "Get Contact",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "empresa",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1104,
+        320
+      ],
+      "id": "36f0000c-6e45-4a2f-83e7-4310e2e99c0a",
+      "name": "Join - Lead and Contact"
+    }
+  ],
+  "connections": {
+    "Form - Lead Register": {
+      "main": [
+        [
+          {
+            "node": "Rebuild Fields  -  Add Status and submittedAt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rebuild Fields  -  Add Status and submittedAt": {
+      "main": [
+        [
+          {
+            "node": "Split Out data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out data": {
+      "main": [
+        [
+          {
+            "node": "Join data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get leads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get leads": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get leads1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Join - Lead and Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Contact": {
+      "main": [
+        [
+          {
+            "node": "Join - Lead and Contact",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {
+    "Form - Lead Register": [
+      {
+        "json": {
+          "Name:": "Marcelo Ribas",
+          "E-mail:": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Personal interests": [
+            "IA",
+            "Cloud"
+          ],
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "formMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Rebuild Fields  -  Add Status and submittedAt": [
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Interests": [
+            "IA",
+            "Cloud"
+          ],
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Split Out data": [
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "Interests": "IA"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "Interests": "Cloud"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Join data": [
+      {
+        "json": {
+          "Interests": [
+            {
+              "Full Name": "Marcelo Ribas",
+              "E-mail": "marcelo.pachione@icloud.com",
+              "Company": "FBD Insurance",
+              "Status:": "",
+              "submittedAt": "2026-07-22T15:36:20.407+01:00",
+              "Interests": "IA"
+            },
+            {
+              "Full Name": "Marcelo Ribas",
+              "E-mail": "marcelo.pachione@icloud.com",
+              "Company": "FBD Insurance",
+              "Status:": "",
+              "submittedAt": "2026-07-22T15:36:20.407+01:00",
+              "Interests": "Cloud"
+            }
+          ]
+        },
+        "pairedItem": [
+          {
+            "item": 0
+          },
+          {
+            "item": 1
+          }
+        ]
+      }
+    ]
+  },
+  "versionId": "88075051-6cfa-4b6a-9874-727f81ace222",
+  "activeVersionId": "8da14d71-c903-44ba-a243-38c824d539d1",
+  "versionCounter": 89,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T14:48:05.466Z",
+      "createdAt": "2026-07-22T14:48:05.466Z",
+      "role": "workflow:owner",
+      "workflowId": "Dfw0cxqQEN4jdn66",
+      "projectId": "Z1zoOkJKyzxUOHEg",
+      "project": {
+        "updatedAt": "2026-07-22T11:49:39.168Z",
+        "createdAt": "2026-07-22T11:47:51.736Z",
+        "id": "Z1zoOkJKyzxUOHEg",
+        "name": "Marcelo ArtEthan <artethan.ai@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "c9e875c1-b3ff-4626-ad6a-815a3474c455"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}
