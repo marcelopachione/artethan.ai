@@ -92,9 +92,14 @@ do container `n8n`, e ajuste:
 ```bash
 ./backups/backup.sh                       # dump do Postgres + tar da pasta data/n8n
 ./backups/restore.sh backups/postgres_YYYYMMDD_HHMMSS.sql.gz
+./backups/backup_workspaces.sh            # exporta workflows como JSON (um arquivo por workflow) em backups/workflows/
 ```
 
-Agende `backup.sh` num cron do host (exemplo no topo do próprio script).
+Agende os scripts num cron do host (exemplo no topo de cada um).
+
+`backups/workflows/*.json` é versionado no git (sem retenção local — o
+histórico fica no git). Depois de rodar `backup_workspaces.sh`, `git add` +
+commit normalmente.
 
 ## Comandos úteis
 

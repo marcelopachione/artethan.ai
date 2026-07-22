@@ -4,12 +4,6 @@
   "enableAllProjectMcpServers": true,
   "permissions": {
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
-      "Read(./**/*.pem)",
-      "Read(./**/*.key)",
-      "Read(./config/credentials.json)",
       "Bash(rm -rf:*)",
       "Bash(sudo:*)",
       "Bash(curl:*)",
@@ -26,7 +20,11 @@
       "Bash(docker ps:*)",
       "Bash(docker logs:*)",
       "Bash(docker inspect:*)",
-      "Bash(docker network:*)"
+      "Bash(docker network:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run test:*)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)"
     ]
   },
   "sandbox": {
