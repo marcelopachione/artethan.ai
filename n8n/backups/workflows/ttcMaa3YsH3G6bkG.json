@@ -1,0 +1,320 @@
+{
+  "updatedAt": "2026-07-22T14:43:38.874Z",
+  "createdAt": "2026-07-22T12:28:10.371Z",
+  "id": "ttcMaa3YsH3G6bkG",
+  "name": "ASIMOV - Criando dados - Lendo - Entendo - Moldando",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Register",
+        "formDescription": "Please fill in your details so we can get in touch.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name:",
+              "placeholder": "Full Name...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail:",
+              "fieldType": "email",
+              "placeholder": "Your best e-email...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company",
+              "placeholder": "Where you work..."
+            },
+            {
+              "fieldLabel": "Personal interests",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "IA"
+                  },
+                  {
+                    "option": "Cloud"
+                  },
+                  {
+                    "option": "N8N"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "43162ff6-2b3b-4d40-bd6b-736f1c69f69d",
+      "name": "Form - Lead Register",
+      "webhookId": "82ad5f06-a959-4f7c-978e-755ec1889ab4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d7982a0e-056b-4a1b-8b6a-a6acb567b428",
+              "name": "Full Name",
+              "value": "={{ $json['Name:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1768704c-7909-4629-93e6-282a110f0964",
+              "name": "E-mail",
+              "value": "={{ $json['E-mail:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6619f959-2b03-4d62-98ba-7b14f913977f",
+              "name": "Company",
+              "value": "={{ $json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "61aa621e-dc8e-4a56-9258-fbd7f3c0e708",
+              "name": "Interests",
+              "value": "={{ $json['Personal interests'] }}",
+              "type": "array"
+            },
+            {
+              "id": "64160365-f9c5-484f-924a-ac50351f2d6c",
+              "name": "Status:",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "e47b8ac4-1a3d-4577-84d3-59dccd8d9f12",
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ca7fec7c-d4c5-4a91-a2ab-4296435bab2c",
+      "name": "Rebuild Fields  -  Add Status and submittedAt"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "Interests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "95e876fc-3322-4b9e-bf3e-1a846e29c01f",
+      "name": "Join data"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "Interests",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c71b1531-d6ea-43ee-934f-207c1e903ab7",
+      "name": "Split Out data"
+    }
+  ],
+  "connections": {
+    "Form - Lead Register": {
+      "main": [
+        [
+          {
+            "node": "Rebuild Fields  -  Add Status and submittedAt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rebuild Fields  -  Add Status and submittedAt": {
+      "main": [
+        [
+          {
+            "node": "Split Out data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out data": {
+      "main": [
+        [
+          {
+            "node": "Join data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {
+    "Form - Lead Register": [
+      {
+        "json": {
+          "Name:": "Marcelo Ribas",
+          "E-mail:": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Personal interests": [
+            "IA",
+            "Cloud"
+          ],
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "formMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Rebuild Fields  -  Add Status and submittedAt": [
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Interests": [
+            "IA",
+            "Cloud"
+          ],
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Split Out data": [
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "Interests": "IA"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Full Name": "Marcelo Ribas",
+          "E-mail": "marcelo.pachione@icloud.com",
+          "Company": "FBD Insurance",
+          "Status:": "",
+          "submittedAt": "2026-07-22T15:36:20.407+01:00",
+          "Interests": "Cloud"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Join data": [
+      {
+        "json": {
+          "Interests": [
+            {
+              "Full Name": "Marcelo Ribas",
+              "E-mail": "marcelo.pachione@icloud.com",
+              "Company": "FBD Insurance",
+              "Status:": "",
+              "submittedAt": "2026-07-22T15:36:20.407+01:00",
+              "Interests": "IA"
+            },
+            {
+              "Full Name": "Marcelo Ribas",
+              "E-mail": "marcelo.pachione@icloud.com",
+              "Company": "FBD Insurance",
+              "Status:": "",
+              "submittedAt": "2026-07-22T15:36:20.407+01:00",
+              "Interests": "Cloud"
+            }
+          ]
+        },
+        "pairedItem": [
+          {
+            "item": 0
+          },
+          {
+            "item": 1
+          }
+        ]
+      }
+    ]
+  },
+  "versionId": "a7e8a98a-9c1d-48cf-869c-c54db2aaed28",
+  "activeVersionId": "a7e8a98a-9c1d-48cf-869c-c54db2aaed28",
+  "versionCounter": 82,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T12:28:10.371Z",
+      "createdAt": "2026-07-22T12:28:10.371Z",
+      "role": "workflow:owner",
+      "workflowId": "ttcMaa3YsH3G6bkG",
+      "projectId": "Z1zoOkJKyzxUOHEg",
+      "project": {
+        "updatedAt": "2026-07-22T11:49:39.168Z",
+        "createdAt": "2026-07-22T11:47:51.736Z",
+        "id": "Z1zoOkJKyzxUOHEg",
+        "name": "Marcelo ArtEthan <artethan.ai@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "c9e875c1-b3ff-4626-ad6a-815a3474c455"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version a7e8a98a",
+    "description": ""
+  }
+}
