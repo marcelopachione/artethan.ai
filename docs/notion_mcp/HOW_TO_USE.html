@@ -1,0 +1,132 @@
+<title>Como usar — Notion MCP Server</title>
+<style>
+  :root {
+    --bg: #fdfbf7;
+    --card: #ffffff;
+    --text: #2b2b2b;
+    --muted: #6b6b6b;
+    --accent: #000000;
+    --accent-bg: #f4f0e8;
+    --border: #e5e0d5;
+    --good-bg: #eaf7ec;
+    --good-border: #9bd6a8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1a17;
+      --card: #262421;
+      --text: #ecebe8;
+      --muted: #a8a49c;
+      --accent: #ffffff;
+      --accent-bg: #333029;
+      --border: #3a372f;
+      --good-bg: #17301c;
+      --good-border: #3f7a4c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    line-height: 1.55;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 28px; }
+  h2 { font-size: 1.15rem; margin-top: 32px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .good {
+    background: var(--good-bg);
+    border: 1px solid var(--good-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  code {
+    background: var(--accent-bg);
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  ul { padding-left: 20px; }
+  li { margin: 6px 0; }
+</style>
+
+<h1>✅ Notion MCP — pronto para uso</h1>
+<p class="subtitle">Instalado neste projeto: <code>artethan.ai</code></p>
+
+<div class="good">
+  <b>Verificação real feita:</b> <code>claude mcp get notionApi</code> retornou
+  <code>Status: ✔ Connected</code>. Está funcionando.
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">📍 Onde usar</h2>
+  <p>
+    Só funciona <b>dentro desta pasta</b> (<code>artethan.ai</code>), porque foi instalado
+    com escopo local. Se abrir o Claude Code em outro projeto seu, o Notion não vai
+    aparecer lá — só aqui.
+  </p>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">🔄 Precisa reiniciar?</h2>
+  <p>
+    Se esta janela do Claude Code já estava aberta antes da instalação, feche e abra o
+    Claude Code de novo nesta pasta para o servidor aparecer na sessão.
+  </p>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">🧪 Primeira coisa para testar</h2>
+  <p>Digite no chat do Claude Code, dentro deste projeto:</p>
+  <pre>Busque no meu Notion por páginas e me liste os títulos que encontrar.</pre>
+  <p>
+    O esperado: o Claude vai usar a ferramenta de busca do Notion e te devolver uma lista
+    de páginas/bancos de dados que sua integração tem acesso. Se vier lista vazia, é sinal
+    de que nenhuma página foi conectada à integração ainda (volta no Notion e conecta as
+    páginas que quer usar).
+  </p>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">🛠️ Comandos úteis</h2>
+  <ul>
+    <li><code>claude mcp list</code> — lista todos os servidores MCP conectados</li>
+    <li><code>claude mcp get notionApi</code> — mostra status detalhado deste servidor</li>
+    <li><code>/mcp</code> — dentro de uma sessão do Claude Code, mostra os MCPs ativos</li>
+    <li><code>claude mcp remove notionApi -s local</code> — remove esta instalação</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">⚙️ O que o Claude pode fazer agora</h2>
+  <ul>
+    <li>Ler e editar páginas do Notion (em Markdown)</li>
+    <li>Consultar e atualizar bancos de dados</li>
+    <li>Criar páginas e bancos de dados novos</li>
+    <li>Buscar conteúdo no seu workspace</li>
+    <li>Ler/criar comentários, ver usuários</li>
+  </ul>
+  <p style="color:var(--muted); font-size:0.85rem;">
+    Lembrete: sua integração só acessa as páginas que você conectou manualmente a ela no
+    Notion. O resto do workspace fica fora do alcance do Claude.
+  </p>
+</div>

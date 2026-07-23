@@ -1,0 +1,243 @@
+<title>Guia de Instalação — Notion MCP Server</title>
+<style>
+  :root {
+    --bg: #fdfbf7;
+    --card: #ffffff;
+    --text: #2b2b2b;
+    --muted: #6b6b6b;
+    --accent: #000000;
+    --accent-bg: #f4f0e8;
+    --border: #e5e0d5;
+    --warn-bg: #fff4e5;
+    --warn-border: #f0c36d;
+    --good-bg: #eaf7ec;
+    --good-border: #9bd6a8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1a17;
+      --card: #262421;
+      --text: #ecebe8;
+      --muted: #a8a49c;
+      --accent: #ffffff;
+      --accent-bg: #333029;
+      --border: #3a372f;
+      --warn-bg: #3a2f14;
+      --warn-border: #8a6a1f;
+      --good-bg: #17301c;
+      --good-border: #3f7a4c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    line-height: 1.55;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 28px; }
+  h2 { font-size: 1.15rem; margin-top: 36px; display: flex; align-items: center; gap: 8px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .grid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin: 6px 0; }
+  code {
+    background: var(--accent-bg);
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    word-break: break-all;
+  }
+  pre {
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .good {
+    background: var(--good-bg);
+    border: 1px solid var(--good-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 38px;
+    margin: 14px 0;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 0;
+    background: var(--accent);
+    color: var(--bg);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    margin-right: 6px;
+  }
+  .diagram {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .box {
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .arrow { font-size: 1.3rem; color: var(--muted); }
+</style>
+
+<h1>🗂️ Notion MCP Server</h1>
+<p class="subtitle">Guia de instalação — só para este projeto</p>
+
+<div class="card">
+  <h2>📖 O que é isso?</h2>
+  <p>
+    É uma "ponte" que permite que o Claude Code converse diretamente com o seu Notion:
+    ler páginas, criar páginas, editar conteúdo, consultar bancos de dados, tudo isso
+    a partir do chat, sem você precisar abrir o navegador.
+  </p>
+  <p>
+    <b>MCP</b> (Model Context Protocol) é o "protocolo" — um padrão que permite ao Claude
+    Code se conectar a ferramentas externas, como o Notion, o GitHub, etc. Pense nisso
+    como um "plugue universal" que a Anthropic e outras empresas adotaram.
+  </p>
+</div>
+
+<div class="warn">
+  <b>⚠️ Aviso do próprio criador (Notion)</b>
+  <p style="margin:6px 0 0">
+    A Notion está priorizando uma versão <b>remota</b> desse servidor (conexão direto pela
+    nuvem, sem instalar nada). Esse repositório que você escolheu é a versão <b>local</b>
+    (roda no seu computador) e pode ser descontinuada no futuro. Ela ainda funciona
+    perfeitamente hoje e dá mais controle (ex: token só de leitura), mas é bom saber disso.
+  </p>
+</div>
+
+<div class="card">
+  <h2>🏷️ Tipo de recurso e como será instalado</h2>
+  <span class="tag">Servidor MCP</span>
+  <p>
+    Caminho oficial de instalação: comando <code>claude mcp add</code>, que registra o
+    servidor para rodar via <code>npx</code> (um jeito de executar um pacote Node.js sem
+    precisar instalá-lo permanentemente).
+  </p>
+</div>
+
+<h2>⚙️ Tudo que ele pode fazer</h2>
+<div class="grid">
+  <div class="card">
+    <b>📄 Páginas</b>
+    <ul>
+      <li>Ler conteúdo de uma página (em Markdown)</li>
+      <li>Criar novas páginas</li>
+      <li>Editar/substituir conteúdo</li>
+      <li>Mover página para outro lugar</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b>🗃️ Bancos de dados (data sources)</b>
+    <ul>
+      <li>Consultar com filtros e ordenação</li>
+      <li>Ver esquema/colunas</li>
+      <li>Criar e atualizar bancos de dados</li>
+      <li>Listar modelos (templates)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b>🔍 Busca</b>
+    <ul>
+      <li>Buscar páginas e bancos de dados no seu workspace</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b>👥 Usuários e comentários</b>
+    <ul>
+      <li>Ver usuários do workspace</li>
+      <li>Ler e criar comentários</li>
+    </ul>
+  </div>
+</div>
+<p class="subtitle">Total: 22 ferramentas (tools) disponíveis para o Claude usar.</p>
+
+<h2>📍 Onde vai viver e onde você vai usar</h2>
+<div class="diagram">
+  <div class="box">Este projeto<br><code>artethan.ai</code></div>
+  <span class="arrow">→</span>
+  <div class="box">Registro local<br><code>.mcp.json</code> ou config local</div>
+  <span class="arrow">→</span>
+  <div class="box">Notion<br>(via API)</div>
+</div>
+<p>
+  Você pediu explicitamente <b>"somente para esse projeto, localmente"</b> — ou seja,
+  <b>escopo local</b>: o servidor só vai funcionar quando você estiver com o Claude Code
+  aberto dentro desta pasta (<code>artethan.ai</code>). Em outros projetos seus, ele não vai
+  aparecer.
+</p>
+
+<h2>🧰 Pré-requisitos (verificados no seu computador)</h2>
+<div class="good">
+  <ul>
+    <li>✅ Node.js instalado — versão <code>v24.18.0</code> (precisa de v18+, você tem de sobra)</li>
+    <li>✅ npm instalado — versão <code>11.16.0</code></li>
+    <li>✅ Claude Code instalado — versão <code>2.1.212</code></li>
+  </ul>
+  <p style="margin:6px 0 0">Nada precisa ser instalado. Só falta o <b>token de acesso do Notion</b>, que você mesmo vai gerar no site do Notion.</p>
+</div>
+
+<h2>📝 Plano de instalação (resumo)</h2>
+<ol class="steps">
+  <li>Você cria uma "integração" no site do Notion (gera um token secreto, tipo uma senha só para o Claude usar).</li>
+  <li>Você conecta essa integração às páginas do Notion que quer que o Claude possa acessar.</li>
+  <li>Eu registro o servidor MCP neste projeto com <code>claude mcp add</code>, guardando o token com segurança.</li>
+  <li>Verificamos juntos que a conexão funcionou.</li>
+</ol>
+
+<h2>🔑 Sobre o token (chave secreta)</h2>
+<p>
+  Um <b>token/env var</b> é como uma senha que fica guardada numa "variável de ambiente"
+  (uma gaveta de configuração do seu computador, não um arquivo visível) — o Claude usa
+  essa senha para provar ao Notion que tem permissão de acessar seus dados.
+  Ele nunca fica exposto em texto no código, nem é enviado para o GitHub.
+</p>
+
+<p style="color:var(--muted); font-size:0.85rem; margin-top:40px;">
+  Próximo passo: Fase 3 — algumas perguntas rápidas antes de instalar qualquer coisa.
+</p>

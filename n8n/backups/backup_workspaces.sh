@@ -20,6 +20,18 @@ rm -rf "$OUT_DIR"
 docker compose cp "n8n:$CONTAINER_TMP" "$OUT_DIR"
 docker compose exec -T n8n rm -rf "$CONTAINER_TMP"
 
+# Rename each exported file from its raw workflow ID to a readable
+# "<workflow-name>_<id>.json" so backups are identifiable at a glance.
+for f in "$OUT_DIR"/*.json; do
+  [ -e "$f" ] || continue
+  id="$(basename "$f" .json)"
+  name="$(jq -r '.name // empty' "$f")"
+  [ -n "$name" ] || continue
+  slug="$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')"
+  [ -n "$slug" ] || continue
+  mv -- "$f" "$OUT_DIR/${slug}_${id}.json"
+done
+
 echo "Backup complete: $OUT_DIR/"
 
 git add "$OUT_DIR"
