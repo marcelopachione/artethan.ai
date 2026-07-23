@@ -1,0 +1,502 @@
+{
+  "updatedAt": "2026-07-23T18:09:32.433Z",
+  "createdAt": "2026-07-23T17:53:53.911Z",
+  "id": "K0xWrfZSFHuIBf6d",
+  "name": "Instagram Auto Post - Drive + Sheets",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "id": "sched1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "sheetsGet1",
+      "name": "Sheets - Get Nao Aplicados",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -48
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ $json.file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if1",
+      "name": "Tem Video Pendente?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get"
+      },
+      "id": "drive1",
+      "name": "Drive - Get File Info",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        672,
+        -48
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "aAmwzczlMOMz1bT9",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const file = $input.first().json;\nconst sheetRow = $('Sheets - Get Nao Aplicados').first().json;\nconst nome = (file.name || '').toLowerCase();\nconst isVideo = nome.endsWith('.mp4') || nome.endsWith('.mov');\nconst directUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;\nreturn [{\n  json: {\n    file_id: file.id,\n    file_name: file.name,\n    media_url: directUrl,\n    media_type: isVideo ? 'REELS' : 'IMAGE',\n    caption: sheetRow.legenda || '',\n    row_number: sheetRow.row_number\n  }\n}];"
+      },
+      "id": "code1",
+      "name": "Montar URL e Tipo de Post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Sheets - Get Nao Aplicados').first().json.ig_user_id || $json.ig_user_id }}/media",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "caption",
+              "value": "={{ $json.caption }}"
+            },
+            {
+              "name": "media_type",
+              "value": "={{ $json.media_type }}"
+            },
+            {
+              "name": "video_url",
+              "value": "={{ $json.media_type === 'REELS' ? $json.media_url : '' }}"
+            },
+            {
+              "name": "image_url",
+              "value": "={{ $json.media_type === 'IMAGE' ? $json.media_url : '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http1",
+      "name": "IG - Criar Media Container",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1120,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "wait1",
+      "name": "Wait - Processamento",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        -48
+      ],
+      "webhookId": "f0b4aece-85cf-4572-a76a-7c4024c051f9"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v21.0/{{ $('IG - Criar Media Container').first().json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "status_code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http2",
+      "name": "IG - Checar Status Container",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond2",
+              "leftValue": "={{ $json.status_code }}",
+              "rightValue": "FINISHED",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if2",
+      "name": "Pronto Para Publicar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1792,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Sheets - Get Nao Aplicados').first().json.ig_user_id }}/media_publish",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $('IG - Criar Media Container').first().json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http3",
+      "name": "IG - Publicar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "mode": "id",
+          "value": "COLOQUE_AQUI_O_SPREADSHEET_ID"
+        },
+        "sheetName": {
+          "mode": "name",
+          "value": "Videos"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Montar URL e Tipo de Post').item.json.row_number }}",
+            "status": "aplicado"
+          },
+          "matchingColumns": [
+            "row_number"
+          ]
+        },
+        "options": {}
+      },
+      "id": "sheetsUpdate1",
+      "name": "Sheets - Marcar Aplicado",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2240,
+        -176
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3xUAGCP4Br2gfLBf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "id": "waitRetry1",
+      "name": "Wait - Retry Status",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2016,
+        48
+      ],
+      "webhookId": "48e058a7-1fa0-41e4-906a-6b25bcd7689d"
+    },
+    {
+      "parameters": {
+        "content": "## Setup necessario antes de ativar\n\n1. Criar App em developers.facebook.com (tipo Business)\n2. Adicionar produto Instagram Graph API\n3. Instagram deve ser conta Business/Creator ligada a uma Facebook Page\n4. Gerar token de acesso com permissoes: instagram_content_publish, pages_show_list, pages_read_engagement, business_management\n5. Trocar token curto por token de longa duracao (60 dias) ou usar System User token (nao expira)\n6. Pegar o IG User ID (via GET /me/accounts depois GET /{page-id}?fields=instagram_business_account)\n7. Cadastrar credencial 'Facebook Graph API' no n8n com esse token\n8. Planilha Google Sheets precisa colunas: file_id (ID do Drive), status (aplicado / nao aplicado), legenda, ig_user_id, row_number\n9. Arquivos no Drive devem estar com compartilhamento 'qualquer pessoa com o link' pra Graph API conseguir baixar\n10. Reels demoram para processar - fluxo faz polling do status_code ate FINISHED antes de publicar",
+        "height": 524,
+        "width": 640
+      },
+      "id": "sticky1",
+      "name": "Setup Meta - Leia Antes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Get Nao Aplicados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Get Nao Aplicados": {
+      "main": [
+        [
+          {
+            "node": "Tem Video Pendente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Video Pendente?": {
+      "main": [
+        [
+          {
+            "node": "Drive - Get File Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Drive - Get File Info": {
+      "main": [
+        [
+          {
+            "node": "Montar URL e Tipo de Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar URL e Tipo de Post": {
+      "main": [
+        [
+          {
+            "node": "IG - Criar Media Container",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IG - Criar Media Container": {
+      "main": [
+        [
+          {
+            "node": "Wait - Processamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - Processamento": {
+      "main": [
+        [
+          {
+            "node": "IG - Checar Status Container",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IG - Checar Status Container": {
+      "main": [
+        [
+          {
+            "node": "Pronto Para Publicar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pronto Para Publicar?": {
+      "main": [
+        [
+          {
+            "node": "IG - Publicar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait - Retry Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - Retry Status": {
+      "main": [
+        [
+          {
+            "node": "IG - Checar Status Container",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IG - Publicar": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Marcar Aplicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "7e85d412-7bec-47ed-a226-bfba5ed10aae",
+  "activeVersionId": null,
+  "versionCounter": 10,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-23T17:53:53.911Z",
+      "createdAt": "2026-07-23T17:53:53.911Z",
+      "role": "workflow:owner",
+      "workflowId": "K0xWrfZSFHuIBf6d",
+      "projectId": "Z1zoOkJKyzxUOHEg",
+      "project": {
+        "updatedAt": "2026-07-22T11:49:39.168Z",
+        "createdAt": "2026-07-22T11:47:51.736Z",
+        "id": "Z1zoOkJKyzxUOHEg",
+        "name": "Marcelo ArtEthan <artethan.ai@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "c9e875c1-b3ff-4626-ad6a-815a3474c455"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}
