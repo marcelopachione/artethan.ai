@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- title aparece na acessibilidade, mas a aba do navegador mostra o branding do n8n (sandbox) -->
+  <title>Nome da Página</title>
+
+  <!-- Fontes: Google Fonts funciona no sandbox, sempre com preconnect e URL absoluta -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- TODO CSS é inline. Nao existe folha de estilo em arquivo proprio dentro do n8n. -->
+  <style>
+    :root {
+      /* Defina a paleta a partir do assunto. Estes sao placeholders. */
+      --bg: #0f1115;
+      --surface: #171a21;
+      --text: #e8eaed;
+      --muted: #9aa0aa;
+      --accent: #c8ff3d;
+      --radius: 14px;
+      --maxw: 1100px;
+      --space: 8px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    /* Icones via SVG inline herdam a cor do texto */
+    .icon { width: 1.25em; height: 1.25em; fill: currentColor; vertical-align: middle; }
+
+    /* Botao com link same-tab (target=_blank e bloqueado no sandbox) */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 24px; border-radius: var(--radius);
+      background: var(--accent); color: #10130a;
+      font-weight: 600; text-decoration: none;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    /* Exemplo de secao */
+    .hero { padding: 96px 0; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1.05; letter-spacing: -.02em; }
+    .hero p { color: var(--muted); max-width: 60ch; margin: 20px auto 32px; }
+
+    /* Reveal on-scroll (IntersectionObserver funciona no sandbox) */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* Mobile-first ja contemplado; ajuste pontos de quebra conforme o layout */
+    @media (max-width: 640px) {
+      .hero { padding: 64px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sprite de icones SVG: defina uma vez, reutilize com <use>. Substitui icon fonts. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-whatsapp" viewBox="0 0 24 24">
+      <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.78 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.69 8.23-8.23 8.23Z"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/>
+    </symbol>
+  </svg>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Headline que abre com o mais característico do assunto</h1>
+        <p>Subheadline curta dizendo a proposta de valor em linguagem do cliente, não do sistema.</p>
+        <!-- Link same-tab. Para WhatsApp, tel e mailto, funciona normalmente. -->
+        <a class="btn" href="https://wa.me/5551999999999?text=Ol%C3%A1">
+          Fale conosco
+          <svg class="icon"><use href="#i-whatsapp"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Adicione as demais secoes aqui, todas usando .container e a escala definida -->
+  </main>
+
+  <!-- JS roda no navegador (allow-scripts). Sem localStorage, cookies, window.parent, window.open. -->
+  <script>
+    // Reveal on-scroll
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /*
+      Exemplo de submit de formulario via fetch para um segundo webhook (padrao seguro):
+
+      document.querySelector('#form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const dados = Object.fromEntries(new FormData(e.target));
+        try {
+          await fetch('https://SEU-N8N/webhook/recebe-form', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados),
+          });
+          // troca a UI em memoria, sem recarregar
+        } catch (err) {
+          // mostra estado de erro
+        }
+      });
+    */
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>n8n-mcp — Guia de Uso</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #5a5a5a; --border: #e2e2e2;
+    --code-bg: #f5f5f7; --accent: #ea4b71; --th-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1a1a1a; --fg: #eaeaea; --muted: #a0a0a0; --border: #333; --code-bg: #252525; --th-bg: #222; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem;
+    line-height: 1.6; font-size: 16px;
+  }
+  h1 { font-size: 1.8rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; }
+  h2 { font-size: 1.3rem; margin-top: 2.5rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.8rem; color: var(--fg); }
+  p.lead { color: var(--muted); }
+  code {
+    font-family: "SF Mono", Consolas, monospace; background: var(--code-bg);
+    padding: .15em .4em; border-radius: 4px; font-size: .9em;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; overflow-x: auto; font-size: .85rem;
+  }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; overflow-x: auto; display: block; }
+  th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; font-size: .92rem; }
+  th { background: var(--th-bg); }
+  .comment { color: var(--muted); font-size: .88rem; margin: .3rem 0 .6rem; }
+  .card {
+    border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem;
+    margin: 1.2rem 0; background: color-mix(in srgb, var(--code-bg) 40%, transparent);
+  }
+  .card h3 { margin-top: 0; }
+  .tag {
+    display: inline-block; font-size: .72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .04em; padding: .15rem .5rem; border-radius: 4px;
+    background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent);
+    margin-left: .5rem; vertical-align: middle;
+  }
+  ol li, ul li { margin-bottom: .3rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>n8n-mcp — Guia de Uso</h1>
+<p class="lead">MCP server que dá acesso direto a nós, templates e workflows do n8n. Configurado em <code>.mcp.json</code>.</p>
+
+<h2>Setup (já feito neste repo)</h2>
+<pre><code>"n8n-mcp": {
+  "command": "n8n-mcp",
+  "args": [],
+  "env": {
+    "MCP_MODE": "stdio",
+    "N8N_API_URL": "${N8N_API_URL}",
+    "N8N_API_KEY": "${N8N_API_KEY}",
+    "WEBHOOK_SECURITY_MODE": "moderate"
+  }
+}</code></pre>
+<ul>
+  <li><code>command: "n8n-mcp"</code> direto (não <code>npx -y</code>) — evita timeout de download em toda sessão. Instalado global com <code>npm install -g n8n-mcp</code>.</li>
+  <li><code>WEBHOOK_SECURITY_MODE=moderate</code> — libera checagem de API em <code>localhost</code> (proteção SSRF do pacote bloqueia localhost por padrão em modo <code>strict</code>).</li>
+  <li><code>N8N_API_URL</code> / <code>N8N_API_KEY</code> vêm do <code>.env</code> — sem eles, só ficam disponíveis os tools de discovery/validação, não os de gerenciar workflow.</li>
+</ul>
+
+<h2>Categorias de tools</h2>
+<table>
+<tr><th>Categoria</th><th>Tools</th><th>Precisa API key?</th></tr>
+<tr><td>Sistema</td><td><code>tools_documentation</code>, <code>n8n_health_check</code>, <code>n8n_audit_instance</code></td><td>health/audit sim</td></tr>
+<tr><td>Descoberta</td><td><code>search_nodes</code>, <code>get_node</code></td><td>não</td></tr>
+<tr><td>Templates</td><td><code>search_templates</code>, <code>get_template</code></td><td>não</td></tr>
+<tr><td>Validação</td><td><code>validate_node</code>, <code>validate_workflow</code></td><td>não</td></tr>
+<tr><td>Gerenciamento</td><td><code>n8n_create_workflow</code>, <code>n8n_list_workflows</code>, <code>n8n_update_partial_workflow</code>, <code>n8n_delete_workflow</code>, etc.</td><td>sim</td></tr>
+</table>
+
+<h2>Exemplos diretos</h2>
+
+<div class="card">
+<h3>1. Checar saúde da conexão <span class="tag">health</span></h3>
+<pre><code>n8n_health_check()</code></pre>
+<p class="comment">Confirma se a API está acessível e responde rápido antes de qualquer outra chamada.</p>
+<pre><code>{
+  "success": true,
+  "data": { "status": "ok", "apiUrl": "http://localhost:5678", "performance": { "responseTimeMs": 927 } }
+}</code></pre>
+</div>
+
+<div class="card">
+<h3>2. Buscar um nó pelo nome <span class="tag">discovery</span></h3>
+<pre><code>search_nodes(query="webhook", limit=3)</code></pre>
+<p class="comment">Retorna os nós que batem com a palavra-chave, ordenados por relevância — usado antes de montar qualquer workflow, pra saber o <code>nodeType</code> exato.</p>
+<pre><code>{
+  "nodeType": "nodes-base.webhook",
+  "workflowNodeType": "n8n-nodes-base.webhook",
+  "displayName": "Webhook",
+  "category": "trigger"
+}</code></pre>
+</div>
+
+<div class="card">
+<h3>3. Ver detalhes de um nó <span class="tag">discovery</span></h3>
+<pre><code>get_node(nodeType="nodes-base.webhook", detail="minimal")</code></pre>
+<p class="comment"><code>detail=minimal</code> traz só o essencial (~200 tokens) — bom pra confirmar tipo/trigger sem gastar contexto com schema completo.</p>
+<pre><code>{
+  "nodeType": "nodes-base.webhook",
+  "isTrigger": true,
+  "isWebhook": true
+}</code></pre>
+</div>
+
+<div class="card">
+<h3>4. Buscar templates prontos <span class="tag">templates</span></h3>
+<pre><code>search_templates(query="slack notification", limit=2)</code></pre>
+<p class="comment">Procura entre 2700+ templates públicos do n8n.io — útil pra não reinventar workflow comum (ex: alerta de erro, notificação Slack).</p>
+<pre><code>{ "total": 644, "items": [{ "id": 5629, "name": "Multi-Channel Workflow Error Alerts..." }] }</code></pre>
+</div>
+
+<div class="card">
+<h3>5. Validar workflow antes de criar/deployar <span class="tag">validação</span></h3>
+<pre><code>validate_workflow(workflow={
+  "nodes": [
+    {"name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "parameters": {"path": "test", "httpMethod": "POST"}},
+    {"name": "Respond", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1, "parameters": {}}
+  ],
+  "connections": {"Webhook": {"main": [[{"node": "Respond", "type": "main", "index": 0}]]}}
+})</code></pre>
+<p class="comment">Passo obrigatório antes de <code>n8n_create_workflow</code> — pega erro de conexão, expressão ou tipo de nó errado sem precisar subir no n8n de verdade.</p>
+<pre><code>{ "valid": true, "summary": { "totalNodes": 2, "errorCount": 0 }, "suggestions": ["Add error handling..."] }</code></pre>
+</div>
+
+<div class="card">
+<h3>6. Criar workflow direto no n8n <span class="tag">precisa API key</span></h3>
+<pre><code>n8n_create_workflow(name="Meu Webhook", nodes=[...], connections={...})</code></pre>
+<p class="comment">Cria já no servidor n8n configurado — sai inativo (precisa <code>activateWorkflow</code> depois via <code>n8n_update_partial_workflow</code>).</p>
+</div>
+
+<div class="card">
+<h3>7. Listar workflows existentes <span class="tag">precisa API key</span></h3>
+<pre><code>n8n_list_workflows()</code></pre>
+<p class="comment">Retorna metadata mínima (id, nome, status) — não traz nodes/connections, usado pra achar o ID antes de um <code>n8n_get_workflow</code> detalhado.</p>
+</div>
+
+<h2>Fluxo recomendado pra criar workflow do zero</h2>
+<ol>
+  <li><code>search_nodes</code> — achar os nós certos</li>
+  <li><code>get_node(detail="standard")</code> — ver parâmetros de cada um</li>
+  <li>Montar JSON de <code>nodes</code> + <code>connections</code></li>
+  <li><code>validate_workflow</code> — validar antes de subir</li>
+  <li><code>n8n_create_workflow</code> — criar (fica inativo)</li>
+  <li><code>n8n_update_partial_workflow(operations=[{"type":"activateWorkflow"}])</code> — ativar</li>
+</ol>
+
+</body>
+</html>

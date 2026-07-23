@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jully Ribas Aesthetics</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --terracota: #8D5A48;
+      --rose: #C27864;
+      --rose-suave: #E8BDB0;
+      --areia: #F2E6DD;
+      --creme: #FBF6F1;
+      --dourado: #D4AF7A;
+      --marrom: #4A2E23;
+      --text: #4A2E23;
+      --muted: #8D5A48;
+      --radius: 18px;
+      --maxw: 1160px;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --font: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    ::selection { background: var(--rose); color: var(--creme); }
+
+    /* Cursor glow: follows pointer, ignored on touch/reduced-motion */
+    .cursor-glow {
+      position: fixed; top: 0; left: 0; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(212,175,122,.16), transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0; transition: opacity .4s ease;
+      will-change: transform;
+    }
+    @media (hover: none) { .cursor-glow { display: none; } }
+
+    body {
+      font-family: var(--font);
+      background: var(--creme);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    .icon { width: 1.25em; height: 1.25em; fill: currentColor; vertical-align: middle; flex-shrink: 0; }
+
+    a { color: inherit; }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(251, 246, 241, 0.72);
+      backdrop-filter: blur(14px) saturate(1.4);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4);
+      border-bottom: 1px solid rgba(141, 90, 72, 0.1);
+      transition: box-shadow .3s ease, border-color .3s ease;
+    }
+    header.is-scrolled {
+      box-shadow: 0 8px 30px -12px rgba(74,46,35,.18);
+      border-color: rgba(141, 90, 72, 0.16);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0;
+      transition: padding .25s ease;
+    }
+    header.is-scrolled .nav { padding: 13px 0; }
+
+    .logo-mark {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .logo-mark img {
+      width: 46px; height: 46px; flex-shrink: 0;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform .3s ease;
+    }
+    .logo-mark:hover img { transform: rotate(-4deg) scale(1.04); }
+    .logo-word {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--marrom);
+      letter-spacing: -.01em;
+      line-height: 1;
+    }
+    .logo-word span {
+      display: block;
+      font-family: var(--font);
+      font-style: normal;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-top: 2px;
+    }
+
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a {
+      position: relative;
+      display: inline-block;
+      padding: 8px 4px;
+      text-decoration: none; font-size: .95rem; font-weight: 500;
+      color: var(--marrom);
+      transition: color .15s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; left: 4px; right: 4px; bottom: 4px; height: 1.5px;
+      background: var(--rose);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .25s ease;
+    }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    @media (max-width: 720px) { .nav-links { display: none; } }
+
+    .btn {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px; border-radius: 999px;
+      background: var(--terracota); color: var(--creme);
+      font-weight: 600; text-decoration: none; font-size: .95rem;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      box-shadow: 0 8px 24px rgba(141, 90, 72, .25);
+      border: none; cursor: pointer;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+      transform: skewX(-20deg);
+      transition: left .6s ease;
+    }
+    .btn:hover::before { left: 130%; }
+    .btn:hover { transform: translateY(-2px); background: var(--rose); box-shadow: 0 12px 30px rgba(194, 120, 100, .35); }
+    .btn:focus-visible { outline: 3px solid var(--dourado); outline-offset: 3px; }
+    .btn-nav { padding: 11px 22px; font-size: .875rem; }
+    .btn-outline {
+      background: transparent; color: var(--terracota);
+      border: 1.5px solid var(--terracota); box-shadow: none;
+    }
+    .btn-outline:hover { background: var(--terracota); color: var(--creme); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      padding: 88px 0 110px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 85% 10%, rgba(212,175,122,.28), transparent 60%),
+        radial-gradient(ellipse 50% 60% at 10% 90%, rgba(194,120,100,.18), transparent 60%);
+      background-size: 140% 140%;
+      animation: bg-drift 16s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes bg-drift {
+      0%, 100% { background-position: 0% 0%, 0% 0%; }
+      50% { background-position: 8% 6%, -6% -8%; }
+    }
+    .hero-blob {
+      position: absolute; z-index: 0; border-radius: 50%; filter: blur(2px);
+      opacity: .5; pointer-events: none;
+    }
+    .hero-blob-1 {
+      width: 340px; height: 340px; top: -80px; right: 8%;
+      background: radial-gradient(circle at 30% 30%, var(--rose-suave), transparent 70%);
+      animation: blob-float 9s ease-in-out infinite;
+    }
+    .hero-blob-2 {
+      width: 220px; height: 220px; bottom: -40px; left: 4%;
+      background: radial-gradient(circle at 30% 30%, var(--dourado), transparent 70%);
+      animation: blob-float 11s ease-in-out infinite reverse;
+    }
+    @keyframes blob-float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-18px, 22px) scale(1.08); }
+    }
+    .hero-grid {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 20px;
+    }
+    .eyebrow::before { content: ''; width: 28px; height: 1.5px; background: var(--dourado); }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      color: var(--marrom);
+      font-weight: 400;
+    }
+    .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(24px); animation: word-in .8s cubic-bezier(.22,1,.36,1) forwards; }
+    .hero h1 em { font-style: italic; color: var(--rose); font-weight: 400; }
+    @keyframes word-in { to { opacity: 1; transform: translateY(0); } }
+
+    .hero p.lead {
+      margin: 24px 0 32px;
+      font-size: 1.125rem;
+      color: var(--terracota);
+      max-width: 46ch;
+      opacity: 0; animation: fade-up .8s ease .5s forwards;
+    }
+    .hero-actions { opacity: 0; animation: fade-up .8s ease .7s forwards; }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .hero-note { display: flex; align-items: center; gap: 8px; font-size: .875rem; color: var(--terracota); }
+
+    .hero-photo {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: 0 30px 60px -20px rgba(74, 46, 35, .35);
+      transition: transform .1s linear;
+    }
+    .hero-photo-inner { width: 100%; height: 110%; transition: transform .6s ease; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo:hover .hero-photo-inner { transform: scale(1.04); }
+    .hero-photo::after {
+      content: '';
+      position: absolute; inset: 0; border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(251,246,241,.25);
+      background: linear-gradient(180deg, rgba(74,46,35,0) 60%, rgba(74,46,35,.35));
+      pointer-events: none;
+    }
+    .hero-photo-badge {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      background: rgba(251,246,241,.92);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-photo-badge .avatar {
+      width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+    }
+    .hero-photo-badge .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo-badge strong { display: block; font-size: .9rem; color: var(--marrom); }
+    .hero-photo-badge span { font-size: .78rem; color: var(--terracota); }
+
+    /* ---------- Stats ---------- */
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding: 40px 0;
+      border-top: 1px solid rgba(141,90,72,.12);
+      border-bottom: 1px solid rgba(141,90,72,.12);
+    }
+    @media (max-width: 640px) { .stats { grid-template-columns: 1fr; gap: 28px; text-align: center; } }
+    .stat strong {
+      display: block; font-family: var(--font-display); font-size: 2.6rem; color: var(--terracota);
+      font-weight: 400;
+    }
+    .stat span { font-size: .875rem; color: var(--muted); }
+
+    /* ---------- Sections ---------- */
+    section { padding: 96px 0; }
+    @media (max-width: 640px) { section { padding: 64px 0; } }
+
+    .section-head { max-width: 640px; margin-bottom: 56px; }
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+      color: var(--marrom);
+      font-weight: 600;
+      letter-spacing: -.01em;
+      margin-top: 12px;
+    }
+    .section-head p { color: var(--terracota); margin-top: 16px; font-size: 1.05rem; }
+    .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+    /* ---------- Sobre ---------- */
+    .sobre { background: var(--areia); }
+    .sobre-grid {
+      display: grid; grid-template-columns: .85fr 1.15fr; gap: 64px; align-items: center;
+    }
+    @media (max-width: 900px) { .sobre-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .sobre-photo {
+      border-radius: 24px; overflow: hidden; aspect-ratio: 3/4;
+      box-shadow: 0 24px 48px -16px rgba(74,46,35,.28);
+    }
+    .sobre-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .sobre-text h2 {
+      font-family: var(--font-display); font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+      color: var(--marrom); font-weight: 600; margin-bottom: 20px;
+    }
+    .sobre-text p { color: var(--terracota); margin-bottom: 16px; font-size: 1.05rem; }
+    .sobre-text p:last-of-type { margin-bottom: 28px; }
+    .assinatura-svg { width: 220px; height: 70px; overflow: visible; }
+    .assinatura-svg path {
+      fill: none; stroke: var(--rose); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 620; stroke-dashoffset: 620;
+    }
+    .assinatura-svg.is-visible path { animation: sign-draw 1.8s ease forwards .2s; }
+    @keyframes sign-draw { to { stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) { .assinatura-svg path { stroke-dashoffset: 0; } }
+
+    /* ---------- Serviços ---------- */
+    .servicos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    @media (max-width: 900px) { .servicos-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .servicos-grid { grid-template-columns: 1fr; } }
+
+    .servico-card {
+      position: relative;
+      background: var(--creme);
+      border: 1px solid rgba(141,90,72,.14);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      overflow: hidden;
+    }
+    .servico-card .spotlight {
+      position: absolute; inset: 0; z-index: 0; opacity: 0;
+      background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(212,175,122,.22), transparent 65%);
+      transition: opacity .3s ease;
+    }
+    .servico-card:hover .spotlight { opacity: 1; }
+    .servico-card > * { position: relative; z-index: 1; }
+    .servico-card::before {
+      content: '';
+      position: absolute; inset: -2px; border-radius: calc(var(--radius) + 2px); z-index: -1;
+      background: linear-gradient(135deg, var(--dourado), var(--rose));
+      opacity: 0; transition: opacity .3s ease;
+    }
+    .servico-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px -20px rgba(141,90,72,.35);
+    }
+    .servico-card:hover::before { opacity: 1; }
+    .servico-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--rose-suave), var(--areia));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--terracota); margin-bottom: 20px;
+      transition: transform .3s ease;
+    }
+    .servico-card:hover .servico-icon { transform: rotate(-6deg) scale(1.08); }
+    .servico-icon .icon { width: 26px; height: 26px; }
+    .servico-card h3 {
+      font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+      color: var(--marrom); margin-bottom: 10px;
+    }
+    .servico-card p { color: var(--terracota); font-size: .95rem; }
+
+    /* ---------- Galeria (carrossel) ---------- */
+    .galeria { background: var(--areia); }
+    .carrossel { position: relative; }
+    .carrossel-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: calc((100% - 2 * 24px) / 3);
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding-bottom: 8px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .carrossel-track::-webkit-scrollbar { display: none; }
+    .carrossel-track.is-static {
+      grid-auto-flow: unset;
+      grid-template-columns: repeat(var(--slide-count, 3), 1fr);
+      overflow-x: visible;
+    }
+    .carrossel-item {
+      scroll-snap-align: start;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      display: block;
+      aspect-ratio: 4/5;
+    }
+    .carrossel-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(74,46,35,.55));
+      opacity: 0; transition: opacity .3s ease;
+    }
+    .carrossel-item:hover::after { opacity: 1; }
+    .carrossel-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s cubic-bezier(.22,1,.36,1);
+    }
+    .carrossel-item:hover img { transform: scale(1.06); }
+
+    .carrossel-nav {
+      display: flex; justify-content: center; align-items: center; gap: 20px;
+      margin-top: 28px;
+    }
+    .carrossel-btn {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--creme); border: 1px solid rgba(141,90,72,.2);
+      color: var(--terracota); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .carrossel-btn:hover { background: var(--terracota); color: var(--creme); transform: translateY(-2px); }
+    .carrossel-btn:focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
+    .carrossel-btn .icon { width: 20px; height: 20px; }
+    .carrossel-btn[disabled] { opacity: .35; cursor: default; transform: none; }
+    .carrossel-btn[disabled]:hover { background: var(--creme); color: var(--terracota); }
+
+    .carrossel-dots { display: flex; gap: 8px; }
+    .carrossel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(141,90,72,.25); border: none; cursor: pointer; padding: 0;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .carrossel-dot.is-active { background: var(--terracota); transform: scale(1.3); }
+
+    @media (max-width: 900px) {
+      .carrossel-track { grid-auto-columns: calc((100% - 24px) / 2); }
+      .carrossel-track.is-static { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .carrossel-track { grid-auto-columns: 84%; }
+      .carrossel-track.is-static { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Depoimentos ---------- */
+    .depoimentos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    @media (max-width: 900px) { .depoimentos-grid { grid-template-columns: 1fr; } }
+    .depoimento-card {
+      position: relative;
+      background: var(--creme);
+      border-radius: var(--radius);
+      padding: 32px;
+      border: 1px solid rgba(141,90,72,.14);
+      transition: transform .25s ease, box-shadow .25s ease;
+      overflow: hidden;
+    }
+    .depoimento-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -22px rgba(141,90,72,.3); }
+    .depoimento-card::before {
+      content: '"';
+      position: absolute; top: -30px; right: 16px;
+      font-family: var(--font-display); font-size: 9rem; font-style: italic;
+      color: var(--areia); z-index: 0; line-height: 1;
+    }
+    .depoimento-card > * { position: relative; z-index: 1; }
+    .stars { display: flex; gap: 4px; color: var(--dourado); margin-bottom: 16px; }
+    .stars .icon { width: 18px; height: 18px; }
+    .depoimento-card p { color: var(--marrom); font-size: .98rem; margin-bottom: 20px; }
+    .depoimento-autor { display: flex; align-items: center; gap: 12px; }
+    .depoimento-autor .dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--dourado));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--creme); font-family: var(--font-display); font-weight: 600;
+    }
+    .depoimento-autor strong { display: block; font-size: .9rem; color: var(--marrom); }
+    .depoimento-autor span { font-size: .8rem; color: var(--terracota); }
+
+    /* ---------- CTA final ---------- */
+    .cta-final {
+      background: linear-gradient(135deg, var(--terracota), var(--marrom));
+      border-radius: 32px;
+      margin: 0 24px;
+      padding: 72px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-final::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 0%, rgba(212,175,122,.25), transparent 60%);
+    }
+    .cta-final-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-final h2 {
+      font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--creme); font-weight: 600; margin-bottom: 16px;
+    }
+    .cta-final p { color: var(--rose-suave); margin-bottom: 32px; font-size: 1.05rem; }
+    .cta-final .btn { background: var(--dourado); color: var(--marrom); }
+    .cta-final .btn:hover { background: var(--creme); }
+
+    /* ---------- Footer ---------- */
+    footer { padding: 56px 0 40px; }
+    .footer-grid {
+      display: flex; justify-content: space-between; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+      padding-bottom: 32px; margin-bottom: 24px;
+      border-bottom: 1px solid rgba(141,90,72,.14);
+    }
+    .footer-social { display: flex; gap: 12px; }
+    .footer-social a {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--areia); color: var(--terracota);
+      text-decoration: none; transition: background .15s ease, color .15s ease;
+    }
+    .footer-social a:hover { background: var(--terracota); color: var(--creme); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      font-size: .85rem; color: var(--terracota);
+    }
+
+    /* ---------- WhatsApp flutuante ---------- */
+    .wa-float {
+      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #25D366; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(37, 211, 102, .45);
+      animation: wa-pulse 2.4s ease-in-out infinite;
+    }
+    .wa-float .icon { width: 30px; height: 30px; }
+    .wa-float:hover { transform: scale(1.08); }
+    .wa-float:focus-visible { outline: 3px solid var(--dourado); outline-offset: 3px; }
+    @keyframes wa-pulse {
+      0%, 100% { box-shadow: 0 10px 30px rgba(37,211,102,.45); }
+      50% { box-shadow: 0 10px 30px rgba(37,211,102,.7), 0 0 0 10px rgba(37,211,102,.12); }
+    }
+
+    /* ---------- Reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-whatsapp" viewBox="0 0 24 24">
+      <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.78 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.69 8.23-8.23 8.23Z"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/>
+    </symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2c.6 3.6 2.4 5.4 6 6-3.6.6-5.4 2.4-6 6-.6-3.6-2.4-5.4-6-6 3.6-.6 5.4-2.4 6-6Z"/>
+    </symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 20c8-1 12-6 14-14-8 1-13 5-14 14Zm0 0c1-4 3-7 6-9"/>
+    </symbol>
+    <symbol id="i-droplet" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>
+    </symbol>
+    <symbol id="i-glow" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 9h18M8 3v4M16 3v4"/>
+    </symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <header>
+    <div class="container nav">
+      <a class="logo-mark" href="#top" aria-label="Jully Ribas Aesthetics home">
+        <img src="https://i.ibb.co/Wp4jp2cN/logo.jpg" alt="Jully Ribas Beauty &amp; Wellness logo" />
+        <span class="logo-word">Jully Ribas<span>Aesthetics</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#sobre">About</a></li>
+        <li><a href="#servicos">Treatments</a></li>
+        <li><a href="#galeria">Gallery</a></li>
+        <li><a href="#depoimentos">Reviews</a></li>
+      </ul>
+      <a class="btn btn-nav" href="https://wa.me/353852573125?text=Hello%20Jully%2C%20I%27d%20like%20to%20book%20a%20consultation.">
+        Book a consultation
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Facial &amp; body aesthetics</span>
+          <h1><span class="word" style="animation-delay:.05s">Care</span> <span class="word" style="animation-delay:.13s">that</span> <span class="word" style="animation-delay:.21s">reveals</span> <span class="word" style="animation-delay:.29s"><em>your</em></span> <span class="word" style="animation-delay:.37s">natural</span> <span class="word" style="animation-delay:.45s">beauty</span></h1>
+          <p class="lead">Personalised facial and body aesthetic protocols, hand-crafted by Jully Ribas, so you can look in the mirror and recognise yourself — only better.</p>
+          <div class="hero-actions">
+            <a class="btn" href="https://wa.me/353852573125?text=Hello%20Jully%2C%20I%27d%20like%20to%20book%20a%20consultation.">
+              Book on WhatsApp
+              <svg class="icon"><use href="#i-whatsapp"/></svg>
+            </a>
+            <a class="btn btn-outline" href="#servicos">View treatments</a>
+          </div>
+          <div class="hero-note" style="margin-top:28px;">
+            <svg class="icon" style="color: var(--dourado);"><use href="#i-check"/></svg>
+            Personalised consultation before every protocol
+          </div>
+        </div>
+        <div class="hero-photo reveal">
+          <div class="hero-photo-inner">
+            <img src="https://i.ibb.co/twkQnrtZ/kimia-kazemi-wYrnlhDQaIA-unsplash.jpg" alt="Aesthetic treatment performed by Jully Ribas" />
+          </div>
+          <div class="hero-photo-badge">
+            <div class="avatar">
+              <img src="https://i.ibb.co/Kp1xWxB3/Whats-App-Image-2026-07-15-at-23-26-38.jpg" alt="Jully Ribas" />
+            </div>
+            <div>
+              <strong>Jully Ribas</strong>
+              <span>Aesthetician</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="stats reveal">
+        <div class="stat">
+          <strong data-count="500" data-suffix="+">0</strong>
+          <span>Treatments delivered</span>
+        </div>
+        <div class="stat">
+          <strong data-count="100" data-suffix="%">0</strong>
+          <span>Personalised protocols</span>
+        </div>
+        <div class="stat">
+          <strong data-count="5" data-suffix="★">0</strong>
+          <span>Client rating</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="sobre" id="sobre">
+      <div class="container sobre-grid">
+        <div class="sobre-photo reveal">
+          <img src="https://i.ibb.co/vfqRBQC/pexels-gabrielpuyen-6135650.jpg" alt="The aesthetics clinic space" />
+        </div>
+        <div class="sobre-text reveal">
+          <span class="eyebrow">Who's looking after you</span>
+          <h2>Hello, I'm Jully</h2>
+          <p>I've worked in facial and body aesthetics for years, always guided by one simple principle: every skin tells a different story, so every protocol is built to measure.</p>
+          <p>You won't find off-the-shelf procedures here. Before any treatment comes listening, assessment and a care plan made for you — for your time, your skin and your goals.</p>
+          <svg class="assinatura-svg reveal" viewBox="0 0 220 70" aria-label="Jully Ribas signature">
+            <path d="M14 14c4 22-2 40-8 44 8 4 16-4 18-16 2 10 8 16 16 14-6-8-4-20 2-26 0 14 8 22 18 20-8-6-6-22 2-28 2 16 10 24 20 22-10-8-8-24 0-30 4 18 14 26 26 22-10-6-10-22-2-30 6 14 18 20 30 16-8-4-12-16-8-26"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicos">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Treatments</span>
+          <h2>Protocols designed for every stage of your skin</h2>
+          <p>Modern techniques combined with individual attention, from the first consultation through to aftercare.</p>
+        </div>
+        <div class="servicos-grid">
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-glow"/></svg></div>
+            <h3>Deep skin cleanse</h3>
+            <p>Cleansing, exfoliation and extraction for visibly renewed, even-toned skin.</p>
+          </div>
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-sparkle"/></svg></div>
+            <h3>Facial harmonisation</h3>
+            <p>Natural enhancement of facial contours, respecting your identity and proportions.</p>
+          </div>
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-droplet"/></svg></div>
+            <h3>Hydration &amp; rejuvenation</h3>
+            <p>Protocols that restore radiance, firmness and glow to face and body skin.</p>
+          </div>
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-leaf"/></svg></div>
+            <h3>Body aesthetics</h3>
+            <p>Contouring and body shaping treatments focused on gradual, healthy results.</p>
+          </div>
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-calendar"/></svg></div>
+            <h3>Personalised consultation</h3>
+            <p>A care plan designed around your skin, your goals and your lifestyle.</p>
+          </div>
+          <div class="servico-card reveal">
+            <div class="spotlight"></div>
+            <div class="servico-icon"><svg class="icon"><use href="#i-check"/></svg></div>
+            <h3>Ongoing aftercare</h3>
+            <p>Follow-up visits and protocol adjustments to keep your results lasting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="galeria" id="galeria">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Gallery</span>
+          <h2>A glimpse of our space and work</h2>
+        </div>
+        <div class="carrossel reveal">
+          <div class="carrossel-track" id="carrosselTrack">
+            <div class="carrossel-item">
+              <img src="https://i.ibb.co/TNkmNkW/pexels-visen-group-2161585898-38194468.jpg" alt="Aesthetics clinic ambience" loading="lazy" />
+            </div>
+            <div class="carrossel-item">
+              <img src="https://i.ibb.co/vC4yD5LD/photo-1713085085470-fba013d67e65.avif" alt="Facial aesthetic care" loading="lazy" />
+            </div>
+            <div class="carrossel-item">
+              <img src="https://i.ibb.co/0PCRV0f/photo-1570172619644-dfd03ed5d881.avif" alt="Aesthetic treatment" loading="lazy" />
+            </div>
+            <div class="carrossel-item">
+              <img src="https://i.ibb.co/wFz7kj2D/pexels-roberto-colatosti-82254438-8826403.jpg" alt="Client relaxing during treatment" loading="lazy" />
+            </div>
+          </div>
+          <div class="carrossel-nav">
+            <button class="carrossel-btn" id="carrosselPrev" aria-label="Previous photos">
+              <svg class="icon" style="transform:rotate(180deg);"><use href="#i-arrow"/></svg>
+            </button>
+            <div class="carrossel-dots" id="carrosselDots"></div>
+            <button class="carrossel-btn" id="carrosselNext" aria-label="Next photos">
+              <svg class="icon"><use href="#i-arrow"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="depoimentos">
+      <div class="container">
+        <div class="section-head center reveal" style="margin-left:auto;margin-right:auto;">
+          <span class="eyebrow">Reviews</span>
+          <h2>Clients who've felt the difference</h2>
+        </div>
+        <div class="depoimentos-grid">
+          <div class="depoimento-card reveal">
+            <div class="stars">
+              <svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg>
+            </div>
+            <p>"I've never felt so well looked after. Jully explains every step and the results showed after the very first sessions."</p>
+            <div class="depoimento-autor">
+              <div class="dot">M</div>
+              <div><strong>Mariana S.</strong><span>Client for 8 months</span></div>
+            </div>
+          </div>
+          <div class="depoimento-card reveal">
+            <div class="stars">
+              <svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg>
+            </div>
+            <p>"A welcoming space and care that feels made just for me. I recommend her without hesitation."</p>
+            <div class="depoimento-autor">
+              <div class="dot">C</div>
+              <div><strong>Camila R.</strong><span>Client for 1 year</span></div>
+            </div>
+          </div>
+          <div class="depoimento-card reveal">
+            <div class="stars">
+              <svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg>
+            </div>
+            <p>"Professional from start to finish. My skin has never been so healthy and glowing."</p>
+            <div class="depoimento-autor">
+              <div class="dot">P</div>
+              <div><strong>Patrícia L.</strong><span>Client for 5 months</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="cta-final reveal">
+        <div class="cta-final-inner">
+          <h2>Ready to start your care journey?</h2>
+          <p>Message Jully on WhatsApp now and book your personalised consultation.</p>
+          <a class="btn" href="https://wa.me/353852573125?text=Hello%20Jully%2C%20I%27d%20like%20to%20book%20a%20consultation.">
+            Book on WhatsApp
+            <svg class="icon"><use href="#i-whatsapp"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <a class="logo-mark" href="#top" aria-label="Jully Ribas Aesthetics home">
+          <img src="https://i.ibb.co/Wp4jp2cN/logo.jpg" alt="Jully Ribas Beauty &amp; Wellness logo" />
+          <span class="logo-word">Jully Ribas<span>Aesthetics</span></span>
+        </a>
+        <div class="footer-social">
+          <a href="https://wa.me/353852573125" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
+          <a href="https://instagram.com" aria-label="Instagram"><svg class="icon"><use href="#i-instagram"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Jully Ribas Aesthetics. All rights reserved.</span>
+        <span>Made with care to reveal your natural beauty.</span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="https://wa.me/353852573125?text=Hello%20Jully%2C%20I%27d%20like%20to%20book%20a%20consultation." aria-label="Message us on WhatsApp">
+    <svg class="icon"><use href="#i-whatsapp"/></svg>
+  </a>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveal on-scroll
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Animated stat counters, triggered once when in view
+    const counters = document.querySelectorAll('[data-count]');
+    const countObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        countObs.unobserve(entry.target);
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        if (reduceMotion) { el.textContent = target + suffix; return; }
+        const duration = 1400;
+        const start = performance.now();
+        const step = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => countObs.observe(el));
+
+    // Cursor glow follows pointer (desktop only)
+    const glow = document.getElementById('cursorGlow');
+    if (glow && !reduceMotion) {
+      window.addEventListener('pointermove', (e) => {
+        glow.style.opacity = '1';
+        glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+      });
+      window.addEventListener('pointerleave', () => { glow.style.opacity = '0'; });
+    }
+
+    // Spotlight tracking on service cards
+    if (!reduceMotion) {
+      document.querySelectorAll('.servico-card').forEach(card => {
+        card.addEventListener('pointermove', (e) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+      });
+    }
+
+    // Gallery carousel: scroll-snap track driven by prev/next buttons + dots
+    (function () {
+      const track = document.getElementById('carrosselTrack');
+      const prevBtn = document.getElementById('carrosselPrev');
+      const nextBtn = document.getElementById('carrosselNext');
+      const dotsWrap = document.getElementById('carrosselDots');
+      if (!track || !prevBtn || !nextBtn || !dotsWrap) return;
+
+      const items = Array.from(track.children);
+
+      // With 3 or fewer photos everything fits on screen at once: lay them
+      // out as a static row instead of a scrollable track, and skip nav.
+      if (items.length <= 3) {
+        track.classList.add('is-static');
+        track.style.setProperty('--slide-count', String(items.length));
+        const nav = document.querySelector('.carrossel-nav');
+        if (nav) nav.style.display = 'none';
+        return;
+      }
+
+      items.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carrossel-dot';
+        dot.setAttribute('aria-label', `Go to photo ${i + 1}`);
+        dot.addEventListener('click', () => {
+          items[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsWrap.appendChild(dot);
+      });
+      const dots = Array.from(dotsWrap.children);
+      const nav = document.querySelector('.carrossel-nav');
+
+      const updateUI = () => {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        const hasOverflow = maxScroll > 4;
+        if (nav) nav.style.display = hasOverflow ? 'flex' : 'none';
+        if (!hasOverflow) return;
+        prevBtn.disabled = track.scrollLeft <= 4;
+        nextBtn.disabled = track.scrollLeft >= maxScroll - 4;
+        const activeIndex = Math.round(track.scrollLeft / items[0].getBoundingClientRect().width);
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === activeIndex));
+      };
+
+      prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -items[0].getBoundingClientRect().width - 24, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: items[0].getBoundingClientRect().width + 24, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+      track.addEventListener('scroll', () => {
+        window.requestAnimationFrame(updateUI);
+      }, { passive: true });
+      window.addEventListener('resize', updateUI);
+      updateUI();
+    })();
+
+    // Header gains a shadow and shrinks slightly once the page scrolls
+    const header = document.querySelector('header');
+    if (header) {
+      const toggleHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
+      window.addEventListener('scroll', toggleHeader, { passive: true });
+      toggleHeader();
+    }
+
+    // Subtle hero photo parallax on scroll (targets the outer wrapper so it
+    // never fights with the CSS hover scale on .hero-photo-inner)
+    const heroPhoto = document.querySelector('.hero-photo');
+    if (heroPhoto && !reduceMotion) {
+      window.addEventListener('scroll', () => {
+        const y = Math.min(window.scrollY, 400);
+        heroPhoto.style.transform = `translateY(${y * 0.08}px)`;
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>

@@ -3,6 +3,14 @@
     "playwright": {
       "command": "npx",
       "args": ["@playwright/mcp@latest"]
+    },
+    "n8n-mcp": {
+      "command": "sh",
+      "args": ["-c", "set -a; . /home/marcelo/workspaces/artethan.ai/.env; set +a; exec n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "WEBHOOK_SECURITY_MODE": "moderate"
+      }
     }
   }
 }
